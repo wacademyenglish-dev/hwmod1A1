@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>WOLF LABS | Corporate Training (HW)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@400;500;600;700&family=Fira+Code:wght@400;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-base: #0F172A;
+            --bg-panel: #1E293B;
+            --accent-brand: #0A66C2;
+            --accent-success: #059669;
+            --accent-danger: #E11D48;
+            --text-main: #F8FAFC;
+        }
+
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            overflow: hidden; 
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation; 
+        }
+
+        .font-display { font-family: 'Playfair Display', serif; letter-spacing: -0.01em; }
+        .font-code { font-family: 'Fira Code', monospace; }
+
+        #app-container {
+            max-width: 480px; margin: 0 auto; height: 100vh; height: 100dvh;
+            background-color: var(--bg-base); display: flex; flex-col; position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5); border-left: 1px solid rgba(255,255,255,0.05); border-right: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .top-bar { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.05); background: rgba(15, 23, 42, 0.95); z-index: 10; }
+        .progress-track { width: 100%; height: 6px; background: #334155; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+        .progress-fill { height: 100%; background: var(--accent-brand); width: 0%; transition: width 0.3s ease; }
+
+        #question-area { flex-grow: 1; overflow-y: auto; padding: 24px; padding-bottom: 100px; }
+
+        .option-btn {
+            width: 100%; background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px;
+            padding: 16px 20px; text-align: left; font-size: 1.05rem; margin-bottom: 12px; color: var(--text-main);
+            transition: all 0.2s; display: flex; align-items: center; font-weight: 500;
+        }
+        .option-btn:active { transform: scale(0.98); }
+        .option-btn.correct { background: rgba(5, 150, 105, 0.2); border-color: var(--accent-success); color: var(--accent-success); }
+        .option-btn.wrong { background: rgba(225, 29, 72, 0.2); border-color: var(--accent-danger); color: #FDA4AF; }
+        
+        .option-letter {
+            width: 32px; height: 32px; border-radius: 6px; background: #334155; display: flex; align-items: center; justify-content: center;
+            font-family: 'Fira Code', monospace; font-weight: bold; margin-right: 16px; color: #94A3B8; flex-shrink: 0;
+        }
+        .option-btn.correct .option-letter { background: var(--accent-success); color: #fff; }
+        .option-btn.wrong .option-letter { background: var(--accent-danger); color: #fff; }
+
+        .slide-in { animation: slideIn 0.4s ease forwards; }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        .shake { animation: shake 0.4s cubic-bezier(.36,.07,.19,.97) both; }
+        @keyframes shake { 10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(3px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); } }
+    </style>
+</head>
+<body>
+
+<div id="app-container" class="flex flex-col">
+    
+    <div id="start-screen" class="flex flex-col items-center justify-center h-full p-8 text-center bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCI+PHJlY3Qgd2lkdGg9IjI0IiBoZWlnaHQ9IjI0IiBmaWxsPSIjMGYxNzJhIj48L3JlY3Q+PHBhdGggZD0iTTAgMGgyNHYxSDB6bTAgMTJoMjRWMHptNiAwdjEyaC0xVjB6bTEyIDB2MTJoLTFWMHoiIGZpbGw9InJnYmEoMjU1LCAyNTUsIDI1NSwgMC4wNSkiLz48L3N2Zz4=')]">
+        <div class="w-24 h-24 bg-[var(--bg-panel)] border border-slate-700 rounded-2xl flex items-center justify-center mb-8 shadow-lg">
+            <i class="fas fa-briefcase text-5xl text-[var(--accent-brand)]"></i>
+        </div>
+        <p class="font-code text-[var(--accent-brand)] text-xs tracking-[0.3em] mb-2 uppercase">Mobile Training</p>
+        <h1 class="font-display text-4xl font-black text-white mb-4 leading-tight">The First <br>Connection</h1>
+        <p class="text-slate-400 text-sm mb-12 font-medium px-4">Complete these 15 quick questions to master professional introductions.</p>
+        <button onclick="startQuiz()" class="w-full py-4 bg-[var(--accent-brand)] text-white font-inter font-bold text-lg uppercase tracking-widest rounded-xl shadow-[0_4px_15px_rgba(10,102,194,0.4)] hover:bg-blue-600 transition-colors">Start Session</button>
+    </div>
+
+    <div id="quiz-ui" class="hidden flex-col h-full w-full">
+        <div class="top-bar">
+            <div class="flex justify-between items-center font-code text-xs font-bold text-slate-400 uppercase tracking-widest">
+                <span id="q-counter">Q 1/15</span>
+                <span id="score-display" class="text-[var(--accent-brand)]">0 XP</span>
+            </div>
+            <div class="progress-track"><div id="progress-bar" class="progress-fill"></div></div>
+        </div>
+        <div id="question-area" class="flex flex-col justify-center"></div>
+    </div>
+
+    <div id="wrap-screen" class="hidden flex-col items-center justify-center h-full p-8 text-center relative">
+        <div class="bg-[var(--bg-panel)] border border-slate-700 w-full text-center relative z-10 p-10 rounded-2xl shadow-2xl">
+            <i class="fas fa-check-circle text-6xl text-[var(--accent-success)] mb-6"></i>
+            <h2 class="font-display text-3xl font-black text-white mb-2 uppercase">Training Complete</h2>
+            <p class="font-inter text-slate-400 mb-8 text-sm">Great job mastering the basics.</p>
+            
+            <div class="bg-[var(--bg-base)] border border-slate-700 p-4 mb-8 rounded-xl">
+                <p class="text-[10px] font-code text-slate-500 uppercase tracking-widest mb-1">Final Score</p>
+                <p id="final-score" class="font-display font-black text-4xl text-[var(--accent-brand)]">0/15</p>
+            </div>
+            
+            <button onclick="location.reload()" class="w-full py-4 bg-transparent border border-[var(--accent-brand)] text-[var(--accent-brand)] font-inter font-bold uppercase tracking-widest hover:bg-[var(--accent-brand)] hover:text-white transition-colors rounded-xl">Return to Dashboard</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    const quizData = [
+        // Vocab
+        { q: "Which department sells the company's products?", opts: ["IT", "HR", "Sales"], ans: 2 },
+        { q: "Who hires new people for the company?", opts: ["Marketing", "HR", "Sales"], ans: 1 },
+        { q: "Who is the top director of the company?", opts: ["The Developer", "The Assistant", "The CEO"], ans: 2 },
+        // Introductions (Video 1 & 2)
+        { q: "Hello, _____ Sarah.", opts: ["I am", "I is", "I are"], ans: 0 },
+        { q: "I work _____ a developer.", opts: ["in", "as", "at"], ans: 1 },
+        { q: "I _____ a manager.", opts: ["am", "work", "is"], ans: 0 },
+        { q: "I work _____ the IT department.", opts: ["at", "in", "as"], ans: 1 },
+        { q: "What is the short form of 'I am'?", opts: ["I'm", "I're", "Am'I"], ans: 0 },
+        // Others (He/She/You)
+        { q: "This is Paul. _____ the CEO.", opts: ["He are", "She is", "He is"], ans: 2 },
+        { q: "This is Mary. _____ the new assistant.", opts: ["He is", "She are", "She is"], ans: 2 },
+        { q: "_____ you the new manager?", opts: ["Is", "Are", "Am"], ans: 1 },
+        { q: "What is the short form of 'She is'?", opts: ["She's", "She're", "Shes'"], ans: 0 },
+        // Application
+        { q: "Read the email: 'I is a developer.' What is the error?", opts: ["It should be 'I are'", "It should be 'I am'", "There is no error"], ans: 1 },
+        { q: "Read the email: 'She works as an HR.' What does she do?", opts: ["She sells products.", "She hires people.", "She is the CEO."], ans: 1 },
+        { q: "A colleague says: 'Nice to meet you.' You reply:", opts: ["I am fine.", "Nice to meet you too.", "I work in Sales."], ans: 1 }
+    ];
+
+    let currentQ = 0; let score = 0; let locked = false;
+
+    function startQuiz() {
+        document.getElementById('start-screen').classList.add('hidden');
+        document.getElementById('quiz-ui').classList.remove('hidden'); document.getElementById('quiz-ui').classList.add('flex');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        locked = false; const qData = quizData[currentQ]; const pct = ((currentQ) / quizData.length) * 100;
+        
+        document.getElementById('progress-bar').style.width = `${pct}%`;
+        document.getElementById('q-counter').innerText = `Q ${currentQ + 1}/${quizData.length}`;
+
+        let optsHtml = qData.opts.map((opt, i) => `
+            <button class="option-btn" onclick="checkAnswer(${i}, this)">
+                <div class="option-letter">${String.fromCharCode(65 + i)}</div>
+                <div class="flex-1">${opt}</div>
+            </button>
+        `).join('');
+
+        const html = `
+            <div class="slide-in w-full">
+                <p class="text-[10px] font-code text-[var(--accent-light)] uppercase tracking-[0.3em] mb-4 bg-sky-900/30 inline-block px-3 py-1 rounded border border-[var(--accent-light)]/30">Module 1 Check</p>
+                <h2 class="text-2xl font-bold text-white mb-8 leading-relaxed font-inter">${qData.q.replace(/_____/g, '<span class="text-[var(--accent-brand)] border-b-2 border-[var(--accent-brand)]">_____</span>')}</h2>
+                <div class="space-y-3 font-inter">${optsHtml}</div>
+            </div>
+        `;
+        document.getElementById('question-area').innerHTML = html;
+    }
+
+    function checkAnswer(idx, btn) {
+        if (locked) return; locked = true;
+        const isCorrect = (idx === quizData[currentQ].ans); const allBtns = document.querySelectorAll('.option-btn');
+        
+        if (isCorrect) {
+            btn.classList.add('correct'); score++; document.getElementById('score-display').innerText = `${score * 10} XP`;
+        } else {
+            btn.classList.add('wrong', 'shake'); allBtns[quizData[currentQ].ans].classList.add('correct');
+            navigator.vibrate && navigator.vibrate(200);
+        }
+
+        setTimeout(() => { currentQ++; if (currentQ < quizData.length) loadQuestion(); else showWrap(); }, 1200);
+    }
+
+    function showWrap() {
+        document.getElementById('quiz-ui').classList.remove('flex'); document.getElementById('quiz-ui').classList.add('hidden');
+        document.getElementById('wrap-screen').classList.remove('hidden'); document.getElementById('wrap-screen').classList.add('flex');
+        document.getElementById('progress-bar').style.width = `100%`; document.getElementById('final-score').innerText = `${score}/${quizData.length}`;
+        if(score === quizData.length) document.getElementById('final-score').classList.replace('text-[var(--accent-brand)]', 'text-[var(--accent-success)]');
+    }
+</script>
+</body>
+</html>
